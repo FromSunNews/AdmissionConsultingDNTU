@@ -279,7 +279,7 @@ const chunkPromises = (promises, chunkSize) => {
 export const uploadSingleDocMDToSupabase = async (data) => {
   const { chunkSize = 1000, chunkOverlap = 500 } = data
 
-  const _rootFolder = 'src/documents/md'
+  const _rootFolder = 'src/documents/md1'
   const chunkSizePromise = 5
   const promises = []
   let documents = []

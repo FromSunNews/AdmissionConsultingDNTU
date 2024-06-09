@@ -12,11 +12,11 @@ export const getAnswerDocumentAssistant = async (dataGetAnswer) => {
   // get vector
   const vectorStoreSupabase = await getVectorStoreSupabase()
   const vectorResults = await vectorStoreSupabase.similaritySearchWithScore(standaloneQuestion, 3)
-  console.log('🚀 ~ getAnswerDocumentAssistant ~ vectorResults:', vectorResults)
-  const vectorThresholds = vectorResults.filter(vector => vector[1] >= 0.86)
+  // console.log('🚀 ~ getAnswerDocumentAssistant ~ vectorResults:', vectorResults)
+  const vectorThresholds = vectorResults.filter(vector => vector[1] >= 0.85)
   console.log('🚀 ~ getAnswerDocumentAssistant ~ vectorThresholds:', vectorThresholds)
 
-  if (vectorThresholds.length === 0) {
+  if (!vectorThresholds.length) {
     return 'NO_ANSWER'
   }
 

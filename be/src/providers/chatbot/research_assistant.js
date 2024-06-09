@@ -28,6 +28,10 @@ import { env } from '../../config/environment'
 const turndownService = new TurndownService()
 
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 // 4. Fetch search results from Brave Search API
 async function getSources(standaloneQuestion) {
   console.log('🚀 ~ getSources ~ standaloneQuestion:', standaloneQuestion)
@@ -196,8 +200,9 @@ async function getImages(standaloneQuestion) {
       }
     )
     if (!response.ok) {
+      console.log('🚀 ~ getImages ~ response:', response)
       throw new Error(
-        `Network response was not ok. Status: ${response.status}`
+        `Network response was not ok. getImages \nStatus: ${response.status}\nError: ${response}`
       )
     }
     const data = await response.json()
@@ -252,7 +257,7 @@ async function getVideos(standaloneQuestion) {
     const response = await fetch(url, requestOptions)
     if (!response.ok) {
       throw new Error(
-        `Network response was not ok. Status: ${response.status}`
+        `Network response was not ok. getVideos \nStatus: ${response.status}\nError: ${response}`
       )
     }
     const responseData = await response.json()
@@ -367,15 +372,15 @@ export async function getAnswerResearchAssistant(dataGetAnswer) {
   console.log('standaloneQuestion', standaloneQuestion)
   let sources
   if (type === 'STREAMING') {
-    const [imagesResult, sourcesResult, videosResult] = await Promise.all([
-      getImages(standaloneQuestion),
+    const [sourcesResult, videosResult] = await Promise.all([
+      // getImages(standaloneQuestion),
       getSources(standaloneQuestion),
       getVideos(standaloneQuestion)
     ])
     // trả về client
     io.to(socketIdMap[sessionId]).emit(`s_create_relevant_info_${emitId}`, {
       type: 'related_content',
-      imagesResult,
+      // imagesResult,
       sourcesResult,
       videosResult
     })
